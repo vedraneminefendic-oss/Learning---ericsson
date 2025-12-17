@@ -1,52 +1,65 @@
 
 import React from 'react';
 
-const ModuleValues: React.FC<{ onNext: () => void }> = ({ onNext }) => {
+const ModuleValues: React.FC<{ onNext: () => void, onBack: () => void }> = ({ onNext, onBack }) => {
   const values = [
     {
       title: "Clarity over complexity",
-      description: "If an employee can't understand the goal of a training in 30 seconds, it's too complicated. I simplify until only the essentials remain."
+      description: "If an employee can't understand the goal quickly, the learning isn't effective. I simplify content to focus on essential outcomes."
     },
     {
-      title: "User-centered, not ego-centered",
-      description: "I don't design for my portfolio; I design for the person in the field. If they find it useless, I change it, regardless of how much time I spent on it."
+      title: "Collaboration by Default",
+      description: "I value working in large, diverse teams. Different perspectives help prevent design blind spots and lead to better global results."
     },
     {
-      title: "Honest Growth",
-      description: "I don't know everything, but I am a fast and curious learner. I admit when I'm wrong and pivot quickly based on feedback."
+      title: "Iterative Feedback",
+      description: "Design shouldn't happen in a vacuum. I use data and pilot groups to identify where a design can be improved and I adapt quickly."
     }
   ];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 animate-fadeIn">
-      <div className="mb-12 text-center">
-        <span className="bg-[#fabd00] text-[#002561] px-4 py-1 rounded-sm text-[10px] font-black uppercase tracking-widest">Stage 05: Principles</span>
-        <h2 className="text-3xl font-black text-[#002561] mt-4 uppercase">How I think</h2>
-        <p className="text-slate-500 mt-2 font-medium">The foundation of my work as a designer.</p>
+    <div className="max-w-4xl mx-auto h-full flex flex-col justify-center py-2 animate-fadeIn overflow-hidden">
+      <div className="mb-4 text-center shrink-0">
+        <span className="bg-[#fabd00] text-[#002561] px-2 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-widest">Stage 05: Principles</span>
+        <h2 className="text-2xl font-black text-[#002561] mt-1 uppercase tracking-tight">My Design Philosophy</h2>
+        <p className="text-slate-500 mt-1 font-medium text-[10px]">Evidence-based approaches for effective learning.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 shrink-0">
         {values.map((v, idx) => (
-          <div key={idx} className="bg-white p-8 border border-slate-100 shadow-lg rounded-sm hover:border-[#002561] transition-colors group">
-            <h3 className="font-black text-[#002561] text-sm uppercase tracking-tight mb-4 group-hover:text-[#fabd00] transition-colors">{v.title}</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">{v.description}</p>
+          <div key={idx} className="bg-white p-4 border border-slate-100 shadow-lg rounded-sm hover:border-[#002561] transition-colors group">
+            <h3 className="font-black text-[#002561] text-[10px] uppercase tracking-tight mb-2 group-hover:text-[#fabd00] transition-colors">{v.title}</h3>
+            <p className="text-[10px] text-slate-500 leading-relaxed">{v.description}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-slate-50 p-10 border-dashed border-2 border-slate-200 text-center rounded-sm mb-12">
-        <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-2 italic">A note on transparency</p>
-        <p className="text-[#002561] font-medium text-lg">
-          "I believe a team of 17 succeeds when communication is open and honest. I value direct feedback and a healthy work-life balance that fuels long-term creativity."
+      <div className="bg-[#002561] text-white p-5 rounded-sm mb-6 shrink overflow-hidden group">
+        <h4 className="text-[9px] font-black text-[#fabd00] uppercase tracking-[0.4em] mb-3">Practical Application: Nudge vs. Sludge</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="border border-white/10 p-3 rounded bg-white/5">
+            <p className="text-[8px] font-black uppercase mb-1 text-red-400">Inefficient (Sludge)</p>
+            <p className="text-[10px] opacity-70 italic">"Please read this 40-page compliance PDF and complete the mandatory 60-minute quiz by Friday."</p>
+          </div>
+          <div className="border border-white/10 p-3 rounded bg-white/5">
+            <p className="text-[8px] font-black uppercase mb-1 text-green-400">Efficient (Nudge)</p>
+            <p className="text-[10px] opacity-70 italic">"Here are the 3 critical changes for your role this week. Try this 2-minute simulation."</p>
+          </div>
+        </div>
+        <p className="text-[11px] font-medium leading-relaxed max-w-2xl border-t border-white/10 pt-3">
+          "Time is a valuable resource. I design learning that respects the employee's workflow by focusing on high-impact actions rather than overwhelming them with unnecessary information."
         </p>
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center gap-2 shrink-0">
         <button 
           onClick={onNext}
-          className="bg-[#002561] hover:bg-[#003a94] text-white font-black py-5 px-16 rounded-sm transition-all shadow-xl text-xs uppercase tracking-widest"
+          className="bg-[#002561] hover:bg-[#003a94] text-white font-black py-4 px-12 rounded-sm transition-all shadow-xl text-[10px] uppercase tracking-widest"
         >
-          Wrap Up Journey →
+          Final Summary →
+        </button>
+        <button onClick={onBack} className="text-[#002561] opacity-50 hover:opacity-100 transition-opacity font-black text-[8px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5">
+          ← Back to Toolkit
         </button>
       </div>
     </div>

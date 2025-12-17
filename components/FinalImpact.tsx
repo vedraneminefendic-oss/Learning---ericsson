@@ -2,66 +2,55 @@
 import React from 'react';
 import { VEDRAN_PROFILE } from '../constants';
 
-const FinalImpact: React.FC = () => {
-  const emailSubject = encodeURIComponent("Wow, amazing application. Lets chat!");
-  const emailBody = encodeURIComponent("Hi Vedran,\n\nWe explored your interactive application and would love to discuss the Learning Experience Designer role further.");
+const FinalImpact: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+  const emailSubject = encodeURIComponent("Wow, just wow. When can we talk?");
+  const emailBody = encodeURIComponent("Hi Vedran,\n\nWe explored your interactive app and want to discuss the LXD role.");
 
   return (
-    <div className="max-w-4xl mx-auto py-12 animate-fadeIn">
-      <div className="text-center mb-20">
-        <div className="w-16 h-1 bg-[#002561] mx-auto mb-8"></div>
-        <h2 className="text-5xl font-black text-[#002561] tracking-tight uppercase">Ready for Impact.</h2>
-        <p className="text-slate-400 font-bold uppercase tracking-[0.3em] mt-4">Göteborg, Sweden</p>
+    <div className="max-w-4xl mx-auto h-full flex flex-col justify-center animate-fadeIn py-2 overflow-hidden">
+      <div className="text-center mb-6 shrink-0">
+        <div className="w-10 h-0.5 bg-[#002561] mx-auto mb-4"></div>
+        <h2 className="text-3xl md:text-4xl font-black text-[#002561] uppercase tracking-tight">Ready for the next step.</h2>
+        <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[8px] mt-1">Göteborg, Sweden</p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-2xl border border-slate-100 p-10 md:p-16 mb-20 relative overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div className="bg-white rounded shadow-xl border border-slate-100 p-6 md:p-10 mb-8 shrink-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
-            <h3 className="text-2xl font-black text-[#002561] mb-6 leading-tight">A Learning Experience Designer who thinks like a Scientist.</h3>
-            <p className="text-slate-600 leading-relaxed mb-8">
-              "Vedran brings more than just instructional design; he brings a data-driven approach to human behavior. With deep roots in Cornerstone and CatalystOne ecosystems, he ensures Ericsson's learning is scalable, technical, and psychologically optimized."
+            <h3 className="text-lg font-black text-[#002561] mb-3 leading-tight">An LXD focused on Behavioral Impact and Technical Efficiency.</h3>
+            <p className="text-slate-600 text-[11px] leading-relaxed mb-6">
+              "Vedran combines a background in Behavioral Science with practical technical expertise from the Cornerstone and CatalystOne ecosystems. He focuses on creating learning solutions that are technically sound, scalable, and designed to drive actual performance shifts within global teams."
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {VEDRAN_PROFILE.skills.map(skill => (
-                <span key={skill} className="text-[9px] font-black uppercase tracking-widest text-slate-400 border border-slate-200 px-2 py-1 rounded-sm">
-                  {skill}
-                </span>
+                <span key={skill} className="text-[8px] font-black uppercase text-slate-400 border border-slate-100 px-1.5 py-0.5 rounded-sm">{skill}</span>
               ))}
             </div>
           </div>
           
-          <div className="relative group">
-            <div className="aspect-square rounded-sm overflow-hidden border-8 border-slate-50 shadow-inner">
-               <img 
-                 src={VEDRAN_PROFILE.photoUrl} 
-                 alt={VEDRAN_PROFILE.name} 
-                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" 
-               />
-            </div>
-            <div className="absolute -bottom-6 -left-6 bg-[#fabd00] p-6 text-[#002561] shadow-xl">
-              <p className="font-black text-sm uppercase tracking-widest">Connect to Learn</p>
-              <p className="text-[10px] font-bold opacity-80 uppercase">Focused on Results</p>
+          <div className="flex justify-center">
+            <div className="w-32 h-32 md:w-48 md:h-48 rounded overflow-hidden border-4 border-slate-50 shadow-md">
+               <img src={VEDRAN_PROFILE.photoUrl} alt={VEDRAN_PROFILE.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="text-center">
-        <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-8">Ready to move forward?</p>
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-          <a 
-            href={`mailto:vedran.eminefendic@gmail.com?subject=${emailSubject}&body=${emailBody}`} 
-            className="inline-block bg-[#002561] text-white font-black py-5 px-12 rounded-sm shadow-xl hover:bg-[#001c4a] transition-all tracking-[0.2em] text-sm uppercase min-w-[280px]"
-          >
+      <div className="text-center shrink-0">
+        <p className="text-slate-400 font-bold uppercase tracking-widest text-[8px] mb-4">Would you like to connect?</p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+          <a href={`mailto:vedran.eminefendic@gmail.com?subject=${emailSubject}&body=${emailBody}`} 
+            className="bg-[#002561] text-white font-black py-4 px-10 rounded-sm shadow-xl text-[10px] uppercase tracking-widest min-w-[200px] text-center">
             Email Vedran
           </a>
-          <a 
-            href={`tel:${VEDRAN_PROFILE.phone.replace(/\s+/g, '')}`} 
-            className="inline-block bg-white text-[#002561] border-2 border-[#002561] font-black py-5 px-12 rounded-sm shadow-lg hover:bg-slate-50 transition-all tracking-[0.2em] text-sm uppercase min-w-[280px]"
-          >
+          <a href={`tel:${VEDRAN_PROFILE.phone}`} 
+            className="bg-white text-[#002561] border border-[#002561] font-black py-4 px-10 rounded-sm text-[10px] uppercase tracking-widest min-w-[200px] text-center">
             {VEDRAN_PROFILE.phone}
           </a>
         </div>
+        <button onClick={onBack} className="text-[#002561] opacity-50 font-black text-[8px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5">
+          ← Revisit Principles
+        </button>
       </div>
     </div>
   );

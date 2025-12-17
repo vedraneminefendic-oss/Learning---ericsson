@@ -1,63 +1,69 @@
 
 import React from 'react';
 
-const ModuleTech: React.FC<{ onNext: () => void }> = ({ onNext }) => {
+const ModuleTech: React.FC<{ onNext: () => void, onBack: () => void }> = ({ onNext, onBack }) => {
   return (
-    <div className="max-w-4xl mx-auto p-6 animate-fadeIn">
-      <div className="mb-12 text-center">
-        <span className="bg-[#fabd00] text-[#002561] px-4 py-1 rounded-sm text-[10px] font-black uppercase tracking-widest">Stage 04: Platforms</span>
-        <h2 className="text-3xl font-black text-[#002561] mt-4 uppercase">Platforms & Tools</h2>
-        <p className="text-slate-500 mt-2 font-medium">Building on top of HCM systems like Cornerstone and CatalystOne.</p>
+    <div className="max-w-4xl mx-auto h-full flex flex-col justify-center py-2 animate-fadeIn overflow-hidden">
+      <div className="mb-4 text-center shrink-0">
+        <span className="bg-[#fabd00] text-[#002561] px-2 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-widest">Stage 04: The Toolkit</span>
+        <h2 className="text-2xl font-black text-[#002561] mt-1 uppercase tracking-tight">Platforms & Workflow</h2>
+        <p className="text-slate-500 mt-1 font-medium text-[10px]">Proven experience with Ericsson's core learning infrastructure.</p>
       </div>
 
-      <div className="bg-white p-10 rounded-sm shadow-xl border border-slate-100 mb-12 relative overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <h3 className="text-xl font-bold text-[#002561] mb-6">Software Experience</h3>
-            <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center font-bold text-[#002561] text-xs">CS</div>
+      <div className="bg-white p-5 rounded-sm shadow-xl border border-slate-100 mb-6 shrink overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start h-full">
+          <div className="space-y-3">
+            <h3 className="text-[10px] font-black text-[#002561] mb-2 uppercase tracking-tight opacity-70">Technical Ecosystem</h3>
+            <ul className="space-y-3">
+              <li className="flex gap-3">
+                <div className="w-7 h-7 flex-shrink-0 bg-slate-100 rounded flex items-center justify-center font-black text-[#002561] text-[8px] border border-slate-200">LMS</div>
                 <div>
-                  <p className="font-bold text-sm">Cornerstone OnDemand</p>
-                  <p className="text-xs text-slate-500">Expert knowledge of LMS/LXP administration and content integration.</p>
+                  <p className="font-bold text-[10px]">Cornerstone & CatalystOne</p>
+                  <p className="text-[9px] text-slate-500 leading-tight">Admin-level understanding of object types, curricula, and automated assignments. I design for the platform, not against it.</p>
                 </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center font-bold text-[#002561] text-xs">C1</div>
+              </li>
+              <li className="flex gap-3">
+                <div className="w-7 h-7 flex-shrink-0 bg-slate-100 rounded flex items-center justify-center font-black text-[#002561] text-[8px] border border-slate-200">ART</div>
                 <div>
-                  <p className="font-bold text-sm">CatalystOne</p>
-                  <p className="text-xs text-slate-500">Hands-on experience managing and deploying HR-tech solutions.</p>
+                  <p className="font-bold text-[10px]">Articulate 360 (Rise & Storyline)</p>
+                  <p className="text-[9px] text-slate-500 leading-tight">Creating clean, responsive, and accessible content that follows SCORM/xAPI standards for reliable tracking.</p>
                 </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center font-bold text-[#002561] text-xs">AI</div>
+              </li>
+              <li className="flex gap-3">
+                <div className="w-7 h-7 flex-shrink-0 bg-slate-100 rounded flex items-center justify-center font-black text-[#002561] text-[8px] border border-slate-200">EFF</div>
                 <div>
-                  <p className="font-bold text-sm">Generative AI Tools</p>
-                  <p className="text-xs text-slate-500">Using AI to speed up drafting, storyboarding, and voiceover work.</p>
+                  <p className="font-bold text-[10px]">Workflow Efficiency</p>
+                  <p className="text-[9px] text-slate-500 leading-tight">Using smart templates and automation to speed up the 'production' phase, leaving more time for the 'design' phase.</p>
                 </div>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
 
-          <div>
-            <h3 className="text-xl font-bold text-[#002561] mb-6">Practical Application</h3>
-            <p className="text-sm text-slate-600 leading-relaxed mb-6">
-              "Technology should be invisible to the learner. Whether I'm building a path in Cornerstone or a flow in CatalystOne, my goal is to reduce clicks and maximize focus. I use AI to handle the repetitive parts of design so I can spend more time talking to SMEs and testing the content with real users."
+          <div className="bg-slate-50 p-5 rounded-sm border-l-4 border-[#002561] h-full flex flex-col justify-center">
+            <h3 className="text-[9px] font-black text-[#002561] mb-2 uppercase tracking-widest opacity-60">The Practical Edge</h3>
+            <p className="text-[11px] text-[#002561] leading-relaxed italic mb-4">
+              "Working at Cornerstone and CatalystOne taught me that a learning designer must be a 'technical translator.' I don't just build content; I ensure it functions perfectly within the global HCM architecture."
             </p>
-            <div className="bg-[#002561] p-4 rounded-sm">
-              <p className="text-[10px] font-black text-[#fabd00] uppercase tracking-widest mb-1">Key Insight</p>
-              <p className="text-white text-xs font-medium italic">"The best learning platform is the one people actually use because it solves their immediate problem."</p>
+            <div className="pt-3 border-t border-slate-200">
+               <div className="flex flex-wrap gap-1.5">
+                 <span className="bg-white px-1.5 py-0.5 border border-slate-200 text-[8px] font-bold text-[#002561] uppercase">Deployment</span>
+                 <span className="bg-white px-1.5 py-0.5 border border-slate-200 text-[8px] font-bold text-[#002561] uppercase">Tracking</span>
+                 <span className="bg-white px-1.5 py-0.5 border border-slate-200 text-[8px] font-bold text-[#002561] uppercase">User Flow</span>
+               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center gap-2 shrink-0">
         <button 
           onClick={onNext}
-          className="bg-[#002561] hover:bg-[#003a94] text-white font-black py-5 px-16 rounded-sm transition-all shadow-xl text-xs uppercase tracking-widest"
+          className="bg-[#002561] hover:bg-[#003a94] text-white font-black py-4 px-12 rounded-sm transition-all shadow-xl text-[10px] uppercase tracking-widest"
         >
           View My Core Values →
+        </button>
+        <button onClick={onBack} className="text-[#002561] opacity-50 hover:opacity-100 transition-opacity font-black text-[8px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5">
+          ← Back to Practical Design
         </button>
       </div>
     </div>
