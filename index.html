@@ -1,37 +1,516 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vedran Eminefendic - LXD Journey</title>
+    
+    <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #FDFDFD;
+            color: #002561;
+            overflow-x: hidden;
         }
         .ericsson-blue { color: #002561; }
         .ericsson-bg { background-color: #002561; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(12deg); }
+            50% { transform: translateY(-10px) rotate(15deg); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-rotate-slow { animation: rotate-slow 20s linear infinite; }
+
+        @keyframes flow {
+            from { stroke-dashoffset: 24; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animate-flow {
+            stroke-dasharray: 12 12;
+            animation: flow 1s linear infinite;
+        }
+        
+        .glow-active {
+            filter: drop-shadow(0 0 8px rgba(250, 189, 0, 0.6));
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #002561; border-radius: 10px; }
     </style>
 <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
 </head>
 <body>
     <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // --- DATA ---
+        const VEDRAN_PROFILE = {
+            name: "Vedran Eminefendic",
+            photoUrl: "https://raw.githubusercontent.com/vedraneminefendic-oss/Learning---ericsson/37ecd72de8484df3bbaf9f450242c41647ce5666/vedran.jpg",
+            role: "Behavioral Scientist & Learning Architect",
+            location: "Gothenburg, SE",
+            phone: "+46735134547",
+            skills: ["Behavioral Science", "LMS/LXP Ecosystems", "Stakeholder Collaboration", "Rapid Prototyping"],
+            background: "A unique blend of behavioral science insights and technical expertise from global HR-tech leaders Cornerstone OnDemand and CatalystOne."
+        };
+
+        const VEDRAN_QUIZ = [
+            {
+                question: "What is Vedran's approach to creating learning that actually sticks?",
+                options: ["Focusing on fancy visuals", "Applying Behavioral Science & Nudging", "Providing long documentation", "Enforcing mandatory completion"],
+                correctAnswer: "Applying Behavioral Science & Nudging",
+                funFact: "Correct. With a background in Behavioral Science, Vedran focuses on reducing 'cognitive load' so the brain can actually process and retain new info."
+            },
+            {
+                question: "Vedran has worked 'under the hood' of Cornerstone and CatalystOne. Why does this matter?",
+                options: ["He simply enjoys new software", "He aligns design with system constraints", "He can manually fix servers", "He prefers digital tools over people"],
+                correctAnswer: "He aligns design with system constraints",
+                funFact: "Exactly. Knowing the technical limits of the LMS means he designs solutions that are actually deployable and scalable globally."
+            },
+            {
+                question: "How does Vedran contribute to a team of 17 LXDs?",
+                options: ["By working strictly in isolation", "Collaborative problem-solving and SME management", "Just following basic instructions", "Focusing exclusively on aesthetics"],
+                correctAnswer: "Collaborative problem-solving and SME management",
+                funFact: "Bingo. He views the LXD role as a bridge between technical SMEs and the end-user, ensuring clear communication at every step."
+            }
+        ];
+
+        // --- COMPONENTS ---
+
+        const Welcome = ({ onStart }) => (
+            <div className="flex flex-col items-center justify-center h-full text-center animate-fadeIn relative py-2">
+                <div className="relative mb-8 group shrink-0">
+                    <div className="absolute inset-[-12px] rounded-full border border-dashed border-[#002561]/20 animate-rotate-slow"></div>
+                    <div className="relative z-10 w-44 h-44 md:w-56 md:h-56 p-1.5 bg-white rounded-full shadow-2xl transition-all duration-700 group-hover:scale-[1.05]">
+                        <div className="w-full h-full rounded-full overflow-hidden border border-slate-50">
+                            <img src={VEDRAN_PROFILE.photoUrl} alt={VEDRAN_PROFILE.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
+                        </div>
+                    </div>
+                    <div className="absolute -bottom-1 right-4 w-12 h-12 bg-[#fabd00] rounded-full flex items-center justify-center shadow-2xl z-20 transform rotate-12 animate-float border-2 border-white">
+                        <span className="text-xl">💡</span>
+                    </div>
+                </div>
+                <div className="max-w-4xl px-6">
+                    <p className="text-[9px] font-black text-[#002561] tracking-[0.6em] uppercase mb-2 opacity-50">Learning Experience Design</p>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#002561] mb-2 tracking-tighter uppercase leading-none">
+                        {VEDRAN_PROFILE.name.split(' ')[0]} <span className="text-[#fabd00]">{VEDRAN_PROFILE.name.split(' ')[1]}.</span>
+                    </h1>
+                    <p className="text-md md:text-xl text-slate-800 font-bold tracking-tight italic mb-2">Maybe your future Learning Experience Designer?</p>
+                    <p className="text-slate-500 mb-8 text-sm max-w-md mx-auto leading-relaxed font-medium">
+                        Bridging <span className="text-[#002561] font-bold">behavioral insights</span> and <span className="text-[#002561] font-bold">LMS ecosystems</span> to drive Ericsson performance.
+                    </p>
+                    <button onClick={onStart} className="group relative bg-[#002561] text-white font-black py-5 px-12 rounded-sm shadow-xl transition-all hover:-translate-y-1 active:scale-95 overflow-hidden">
+                        <span className="relative z-10 tracking-[0.4em] text-xs">EXPLORE JOURNEY</span>
+                        <div className="absolute inset-0 bg-white/5 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+                    </button>
+                </div>
+            </div>
+        );
+
+        const ModuleVedranQuiz = ({ onNext, onBack }) => {
+            const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
+            const [selectedOption, setSelectedOption] = useState(null);
+            const [showFeedback, setShowFeedback] = useState(false);
+
+            const baseQuestion = VEDRAN_QUIZ[currentQuestionIdx];
+
+            // Shuffle options and find new correct index
+            const { shuffledOptions, correctIndex } = useMemo(() => {
+                const optionsWithCorrect = baseQuestion.options.map(opt => ({
+                    text: opt,
+                    isCorrect: opt === baseQuestion.correctAnswer
+                }));
+                
+                // Fisher-Yates shuffle
+                for (let i = optionsWithCorrect.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithCorrect[i], optionsWithCorrect[j]] = [optionsWithCorrect[j], optionsWithCorrect[i]];
+                }
+
+                return {
+                    shuffledOptions: optionsWithCorrect.map(o => o.text),
+                    correctIndex: optionsWithCorrect.findIndex(o => o.isCorrect)
+                };
+            }, [currentQuestionIdx]);
+
+            const isCorrect = selectedOption === correctIndex;
+
+            const handleOptionClick = (idx) => {
+                if (showFeedback) return;
+                setSelectedOption(idx);
+                setTimeout(() => setShowFeedback(true), 400);
+            };
+
+            const handleAction = () => {
+                if (isCorrect) {
+                    if (currentQuestionIdx < VEDRAN_QUIZ.length - 1) {
+                        setCurrentQuestionIdx(currentQuestionIdx + 1);
+                        setSelectedOption(null);
+                        setShowFeedback(false);
+                    } else {
+                        onNext();
+                    }
+                } else {
+                    setSelectedOption(null);
+                    setShowFeedback(false);
+                }
+            };
+
+            return (
+                <div className="max-w-xl mx-auto h-full flex flex-col justify-center py-2 animate-fadeIn">
+                    <div className="text-center mb-6">
+                        <span className="bg-[#fabd00] text-[#002561] px-2 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-widest">Stage 01: Introduction</span>
+                        <h2 className="text-2xl font-black text-[#002561] mt-2 uppercase tracking-tight">Professional Background</h2>
+                    </div>
+                    <div className="bg-white rounded shadow-xl overflow-hidden border border-slate-100 flex flex-col">
+                        <div className="p-6 md:p-8">
+                            <p className="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-widest">Question {currentQuestionIdx + 1}/{VEDRAN_QUIZ.length}</p>
+                            <h3 className="text-lg font-bold text-[#002561] mb-6 leading-tight">{baseQuestion.question}</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {shuffledOptions.map((option, idx) => (
+                                    <button 
+                                        key={idx} 
+                                        onClick={() => handleOptionClick(idx)} 
+                                        disabled={showFeedback} 
+                                        className={`text-left p-4 rounded border font-bold transition-all text-xs flex items-center gap-3 ${showFeedback ? (idx === correctIndex ? 'border-green-500 bg-green-50' : (idx === selectedOption ? 'border-red-400 bg-red-50' : 'opacity-40 grayscale')) : 'border-slate-100 hover:border-[#002561]'}`}
+                                    >
+                                        <span className="shrink-0 w-5 h-5 flex items-center justify-center rounded bg-slate-100 text-[9px] font-black">{idx + 1}</span>
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        {showFeedback && (
+                            <div className={`p-6 border-t ${isCorrect ? 'bg-green-50/40 border-green-100' : 'bg-red-50/40 border-red-100'}`}>
+                                <p className="text-[9px] font-black uppercase tracking-widest mb-1">{isCorrect ? 'Correct' : 'Note'}</p>
+                                <p className="text-xs text-slate-700 leading-relaxed mb-4">{isCorrect ? baseQuestion.funFact : `The correct answer is: ${baseQuestion.correctAnswer}.`}</p>
+                                <button onClick={handleAction} className="w-full py-3 bg-[#002561] text-white font-black rounded text-[10px] uppercase tracking-widest shadow-lg">
+                                    {isCorrect ? (currentQuestionIdx === VEDRAN_QUIZ.length - 1 ? "Proceed →" : "Next Question →") : "Try Again"}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    {!showFeedback && (
+                        <div className="mt-4 flex justify-center">
+                            <button onClick={onBack} className="text-[#002561] opacity-50 hover:opacity-100 transition-opacity font-black text-[9px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5">← Back to Welcome</button>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const ModuleEricssonFit = ({ onNext, onBack }) => {
+            const [hoveredId, setHoveredId] = useState(null);
+            const synergyPairs = [
+                { id: 'blended', need: "High-Impact Learning", contribution: "Behavioral Science", icon: "🧠", details: "Applying behavioral insights to ensure learning translates to actual performance improvement." },
+                { id: 'stakeholder', need: "Global Collaboration", contribution: "Stakeholder Focus", icon: "🤝", details: "Treating SMEs as partners to deliver aligned and accurate content efficiently." },
+                { id: 'digital', need: "Scalable Solutions", contribution: "LMS Technical Depth", icon: "⚙️", details: "Leveraging technical depth in Cornerstone and CatalystOne to build scalable architectures." },
+                { id: 'data', need: "Performance Tracking", contribution: "Iterative Prototyping", icon: "📊", details: "Using prototyping to test and refine learning solutions based on practical feedback." }
+            ];
+
+            return (
+                <div className="max-w-6xl mx-auto h-full flex flex-col justify-center animate-fadeIn py-2 overflow-hidden">
+                    <div className="text-center mb-4 shrink-0">
+                        <span className="bg-[#fabd00] text-[#002561] px-2 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-widest">Stage 02: Strategic Fit</span>
+                        <h2 className="text-2xl font-black text-[#002561] mt-1 uppercase tracking-tight">The Synergy Diagram</h2>
+                    </div>
+                    <div className="min-h-[70px] mb-4 shrink-0 flex justify-center items-center px-4">
+                        {hoveredId ? (
+                            <div className="bg-white border border-slate-100 p-3 rounded-sm shadow-lg max-w-2xl w-full relative animate-fadeIn">
+                                <div className="absolute -top-2 left-4 bg-[#002561] text-white px-2 py-0.5 rounded-sm text-[7px] font-black uppercase tracking-widest">Design Logic</div>
+                                <p className="text-slate-600 font-medium italic text-[11px] leading-relaxed border-l-2 border-[#fabd00] pl-4">"{synergyPairs.find(p => p.id === hoveredId)?.details}"</p>
+                            </div>
+                        ) : (
+                            <div className="text-center py-4 px-8 border border-dashed border-slate-200 rounded-sm w-full max-w-xl">
+                                <p className="text-slate-400 font-bold text-[9px] uppercase tracking-[0.4em] animate-pulse">Hover over a requirement to reveal design logic</p>
+                            </div>
+                        )}
+                    </div>
+                    <div className="relative grid grid-cols-1 lg:grid-cols-12 items-center gap-2 mb-4 shrink min-h-0">
+                        <div className="lg:col-span-4 space-y-2 z-20">
+                            {synergyPairs.map((pair) => (
+                                <div key={pair.id} onMouseEnter={() => setHoveredId(pair.id)} onMouseLeave={() => setHoveredId(null)} className={`p-3 rounded-sm border transition-all duration-300 cursor-default text-right relative overflow-hidden ${hoveredId === pair.id ? 'border-[#002561] bg-white shadow-md translate-x-2' : 'border-slate-50 bg-slate-50 opacity-60'}`}>
+                                    <p className="text-[10px] font-black text-[#002561] uppercase tracking-tight">{pair.need}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="lg:col-span-4 flex items-center justify-center relative min-h-[180px]">
+                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 400" preserveAspectRatio="none">
+                                {synergyPairs.map((pair, idx) => {
+                                    const isActive = hoveredId === pair.id;
+                                    const startY = 80 + (idx * 80);
+                                    const hubY = 200;
+                                    const pathD = `M 0 ${startY} C 150 ${startY}, 150 ${hubY}, 200 ${hubY} C 250 ${hubY}, 250 ${startY}, 400 ${startY}`;
+                                    return (
+                                        <g key={pair.id}>
+                                            <path d={pathD} fill="none" stroke="#e2e8f0" strokeWidth="1.5" className="transition-opacity duration-500" style={{ opacity: hoveredId && !isActive ? 0.1 : 0.5 }} />
+                                            {isActive && <path d={pathD} fill="none" stroke="#fabd00" strokeWidth="3" strokeLinecap="round" className="animate-flow glow-active" />}
+                                        </g>
+                                    );
+                                })}
+                            </svg>
+                            <div className="relative z-10 w-24 h-24 bg-[#002561] rounded-full flex items-center justify-center shadow-2xl border-4 border-white transition-all duration-500 overflow-hidden">
+                                <div className={`absolute inset-0 rounded-full border-2 border-dashed border-[#fabd00]/30 animate-[spin_10s_linear_infinite] ${hoveredId ? 'opacity-100' : 'opacity-0'}`}></div>
+                                <span className="text-4xl transform transition-transform duration-500 group-hover:scale-110">{hoveredId ? synergyPairs.find(p => p.id === hoveredId)?.icon : '💡'}</span>
+                            </div>
+                        </div>
+                        <div className="lg:col-span-4 space-y-2 z-20">
+                            {synergyPairs.map((pair) => (
+                                <div key={pair.id} onMouseEnter={() => setHoveredId(pair.id)} onMouseLeave={() => setHoveredId(null)} className={`p-3 rounded-sm border transition-all duration-300 cursor-default relative overflow-hidden ${hoveredId === pair.id ? 'border-[#fabd00] bg-white shadow-md -translate-x-2' : 'border-slate-50 bg-slate-50 opacity-60'}`}>
+                                    <p className="text-[10px] font-black text-[#002561] uppercase tracking-tight">{pair.contribution}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-center gap-3 shrink-0">
+                        <button onClick={onNext} className="group relative bg-[#002561] text-white font-black py-4 px-12 rounded-sm shadow-xl tracking-widest text-[10px] uppercase overflow-hidden">
+                            <span className="relative z-10">PROCEED TO STAKEHOLDER STRATEGY →</span>
+                            <div className="absolute inset-0 bg-[#fabd00] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                        </button>
+                        <button onClick={onBack} className="text-[#002561] opacity-50 font-black text-[8px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5 hover:opacity-100 transition-opacity">← Back to Qualification</button>
+                    </div>
+                </div>
+            );
+        };
+
+        const ModuleStakeholder = ({ onNext, onBack }) => {
+            const [selectedScenario, setSelectedScenario] = useState(null);
+            const scenarios = [
+                { id: 0, title: "Challenge: High-Level Stakeholder Management", context: "Coordinating between technical experts and organizational needs to deliver training at scale.", approach: "I treat internal experts as partners. I handle the technical architecture so they can focus on their expertise. This reduces friction and ensures content is both accurate and scalable." },
+                { id: 1, title: "Challenge: Aligning Design with Behavior", context: "Ensuring learning solutions lead to actual behavioral change rather than just 'box-ticking'.", approach: "I use behavioral science insights to move past completion rates. We identify the behavioral shift needed, design for that outcome, and measure success through performance metrics." }
+            ];
+
+            return (
+                <div className="max-w-4xl mx-auto h-full flex flex-col justify-center py-2 animate-fadeIn overflow-hidden">
+                    <div className="mb-4 text-center shrink-0">
+                        <span className="bg-[#fabd00] text-[#002561] px-2 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-widest">Stage 03: Practical Design</span>
+                        <h2 className="text-2xl font-black text-[#002561] mt-1 uppercase">How I work with people</h2>
+                    </div>
+                    <div className="space-y-3 mb-6 shrink min-h-0 overflow-y-auto pr-2 custom-scrollbar">
+                        {scenarios.map((s) => (
+                            <div key={s.id} className={`cursor-pointer transition-all p-4 rounded-sm border-2 ${selectedScenario === s.id ? 'border-[#002561] bg-white shadow-lg' : 'border-slate-100 bg-slate-50 hover:border-slate-200'}`} onClick={() => setSelectedScenario(s.id)}>
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="font-bold text-sm text-[#002561]">{s.title}</h3>
+                                    {selectedScenario === s.id && <span className="text-green-600 font-black text-[8px] uppercase tracking-widest">Selected Approach</span>}
+                                </div>
+                                <p className="text-[11px] text-slate-500 mb-3 italic">"{s.context}"</p>
+                                {selectedScenario === s.id && (
+                                    <div className="bg-slate-50/50 p-4 rounded-sm border-l-4 border-[#fabd00] animate-fadeIn">
+                                        <p className="text-[#002561] leading-relaxed text-[11px] font-medium">{s.approach}</p>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex flex-col items-center gap-2 shrink-0">
+                        <button onClick={onNext} disabled={selectedScenario === null} className={`px-12 py-4 rounded-sm font-black transition-all uppercase tracking-widest text-[10px] ${selectedScenario !== null ? 'bg-[#002561] text-white hover:bg-[#003a94] shadow-lg' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}>View Technical Experience →</button>
+                        <button onClick={onBack} className="text-[#002561] opacity-50 hover:opacity-100 transition-opacity font-black text-[8px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5">← Back to Strategic Fit</button>
+                    </div>
+                </div>
+            );
+        };
+
+        const ModuleTech = ({ onNext, onBack }) => (
+            <div className="max-w-4xl mx-auto h-full flex flex-col justify-center py-2 animate-fadeIn overflow-hidden">
+                <div className="mb-4 text-center shrink-0">
+                    <span className="bg-[#fabd00] text-[#002561] px-2 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-widest">Stage 04: Technical Toolkit</span>
+                    <h2 className="text-2xl font-black text-[#002561] mt-1 uppercase tracking-tight">Ecosystem Experience</h2>
+                </div>
+                <div className="bg-white p-5 rounded-sm shadow-xl border border-slate-100 mb-6 shrink overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                        <div className="space-y-3">
+                            <h3 className="text-[10px] font-black text-[#002561] mb-2 uppercase tracking-tight opacity-70">LMS/LXP Expertise</h3>
+                            <ul className="space-y-3">
+                                <li className="flex gap-3">
+                                    <div className="w-7 h-7 flex-shrink-0 bg-slate-100 rounded flex items-center justify-center font-black text-[#002561] text-[8px] border border-slate-200">CSOD</div>
+                                    <div><p className="font-bold text-[10px]">Cornerstone OnDemand</p><p className="text-[9px] text-slate-500 leading-tight">Admin-level understanding of object management and automated learning assignments.</p></div>
+                                </li>
+                                <li className="flex gap-3">
+                                    <div className="w-7 h-7 flex-shrink-0 bg-slate-100 rounded flex items-center justify-center font-black text-[#002561] text-[8px] border border-slate-200">C1</div>
+                                    <div><p className="font-bold text-[10px]">CatalystOne</p><p className="text-[9px] text-slate-500 leading-tight">Implementing learning strategies within global HR-tech platforms at scale.</p></div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="bg-slate-50 p-5 rounded-sm border-l-4 border-[#002561]">
+                            <p className="text-[11px] text-[#002561] leading-relaxed italic mb-4">"I serve as a technical bridge between designers and system admins, ensuring everything built is scalable and deployable globally."</p>
+                            <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-200">
+                                <span className="bg-white px-1.5 py-0.5 border border-slate-200 text-[8px] font-bold text-[#002561] uppercase">Deployment</span>
+                                <span className="bg-white px-1.5 py-0.5 border border-slate-200 text-[8px] font-bold text-[#002561] uppercase">Architecture</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-col items-center gap-2 shrink-0">
+                    <button onClick={onNext} className="bg-[#002561] hover:bg-[#003a94] text-white font-black py-4 px-12 rounded-sm transition-all shadow-xl text-[10px] uppercase tracking-widest">View Design Principles →</button>
+                    <button onClick={onBack} className="text-[#002561] opacity-50 hover:opacity-100 transition-opacity font-black text-[8px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5">← Back to Practical Design</button>
+                </div>
+            </div>
+        );
+
+        const ModuleValues = ({ onNext, onBack }) => (
+            <div className="max-w-4xl mx-auto h-full flex flex-col justify-center py-2 animate-fadeIn overflow-hidden">
+                <div className="mb-4 text-center shrink-0">
+                    <span className="bg-[#fabd00] text-[#002561] px-2 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-widest">Stage 05: Principles</span>
+                    <h2 className="text-2xl font-black text-[#002561] mt-1 uppercase tracking-tight">Design Philosophy</h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                    {[
+                        { title: "Clarity over complexity", desc: "Simplifying content to focus on the essential outcomes for the learner." },
+                        { title: "Collaboration", desc: "Working in diverse teams to prevent design blind spots and ensure alignment." },
+                        { title: "Iterative Prototyping", desc: "Using rapid feedback loops to refine design before full-scale deployment." }
+                    ].map((v, idx) => (
+                        <div key={idx} className="bg-white p-4 border border-slate-100 shadow-lg rounded-sm group hover:border-[#002561]">
+                            <h3 className="font-black text-[#002561] text-[10px] uppercase tracking-tight mb-2">{v.title}</h3>
+                            <p className="text-[10px] text-slate-500 leading-relaxed">{v.desc}</p>
+                        </div>
+                    ))}
+                </div>
+                <div className="bg-[#002561] text-white p-5 rounded-sm mb-6 shrink overflow-hidden">
+                    <h4 className="text-[9px] font-black text-[#fabd00] uppercase tracking-[0.4em] mb-3">Behavioral Impact</h4>
+                    <p className="text-[11px] font-medium leading-relaxed max-w-2xl">"I design learning that respects time. By focusing on behavioral nudges rather than information 'sludge', we drive better performance with less friction."</p>
+                </div>
+                <div className="flex flex-col items-center gap-2 shrink-0">
+                    <button onClick={onNext} className="bg-[#002561] hover:bg-[#003a94] text-white font-black py-4 px-12 rounded-sm transition-all shadow-xl text-[10px] uppercase tracking-widest">Final Summary →</button>
+                    <button onClick={onBack} className="text-[#002561] opacity-50 hover:opacity-100 transition-opacity font-black text-[8px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5">← Back to Tech Toolkit</button>
+                </div>
+            </div>
+        );
+
+        const FinalImpact = ({ onBack }) => {
+            const emailSubject = encodeURIComponent("Candidate Follow-up: LXD Role");
+            const emailBody = encodeURIComponent("Hi Vedran,\n\nI explored your interactive prototype and would like to discuss the LXD role further.");
+            return (
+                <div className="max-w-4xl mx-auto h-full flex flex-col justify-center animate-fadeIn py-2 overflow-hidden">
+                    <div className="text-center mb-6 shrink-0">
+                        <div className="w-10 h-0.5 bg-[#002561] mx-auto mb-4"></div>
+                        <h2 className="text-3xl md:text-4xl font-black text-[#002561] uppercase tracking-tight">Ready for the next step.</h2>
+                        <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[8px] mt-1">Göteborg, Sweden</p>
+                    </div>
+                    <div className="bg-white rounded shadow-xl border border-slate-100 p-6 md:p-10 mb-8 shrink-0">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <h3 className="text-lg font-black text-[#002561] mb-3 leading-tight">An LXD focused on Behavioral Impact and Technical Efficiency.</h3>
+                                <p className="text-slate-600 text-[11px] leading-relaxed mb-6">"Vedran combines a background in behavioral science with practical expertise in global LMS platforms. He focuses on creating learning solutions that are scalable, technically sound, and designed for measurable change."</p>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {VEDRAN_PROFILE.skills.map(skill => <span key={skill} className="text-[8px] font-black uppercase text-slate-400 border border-slate-100 px-1.5 py-0.5 rounded-sm">{skill}</span>)}
+                                </div>
+                            </div>
+                            <div className="flex justify-center">
+                                <div className="w-32 h-32 md:w-48 md:h-48 rounded overflow-hidden border-4 border-slate-50 shadow-md">
+                                    <img src={VEDRAN_PROFILE.photoUrl} alt={VEDRAN_PROFILE.name} className="w-full h-full object-cover grayscale" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="text-center shrink-0">
+                        <p className="text-slate-400 font-bold uppercase tracking-widest text-[8px] mb-4">Would you like to connect?</p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+                            <a href={`mailto:vedran.eminefendic@gmail.com?subject=${emailSubject}&body=${emailBody}`} className="bg-[#002561] text-white font-black py-4 px-10 rounded-sm shadow-xl text-[10px] uppercase tracking-widest min-w-[200px] text-center">Email Vedran</a>
+                            <a href={`tel:${VEDRAN_PROFILE.phone}`} className="bg-white text-[#002561] border border-[#002561] font-black py-4 px-10 rounded-sm text-[10px] uppercase tracking-widest min-w-[200px] text-center">{VEDRAN_PROFILE.phone}</a>
+                        </div>
+                        <button onClick={onBack} className="text-[#002561] opacity-50 font-black text-[8px] uppercase tracking-widest border-b border-[#002561]/20 pb-0.5">← Revisit Principles</button>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- MAIN APP ---
+
+        const App = () => {
+            const steps = ['WELCOME', 'QUIZ', 'FIT', 'STAKEHOLDERS', 'TECH', 'VALUES', 'FINAL'];
+            const [currentStep, setCurrentStep] = useState('WELCOME');
+            
+            const handleNext = () => {
+                const idx = steps.indexOf(currentStep);
+                if (idx < steps.length - 1) setCurrentStep(steps[idx + 1]);
+            };
+
+            const handleBack = () => {
+                const idx = steps.indexOf(currentStep);
+                if (idx > 0) setCurrentStep(steps[idx - 1]);
+            };
+
+            const progress = ((steps.indexOf(currentStep) + 1) / steps.length) * 100;
+
+            const renderStep = () => {
+                switch(currentStep) {
+                    case 'WELCOME': return <Welcome onStart={handleNext} />;
+                    case 'QUIZ': return <ModuleVedranQuiz onNext={handleNext} onBack={handleBack} />;
+                    case 'FIT': return <ModuleEricssonFit onNext={handleNext} onBack={handleBack} />;
+                    case 'STAKEHOLDERS': return <ModuleStakeholder onNext={handleNext} onBack={handleBack} />;
+                    case 'TECH': return <ModuleTech onNext={handleNext} onBack={handleBack} />;
+                    case 'VALUES': return <ModuleValues onNext={handleNext} onBack={handleBack} />;
+                    case 'FINAL': return <FinalImpact onBack={handleBack} />;
+                    default: return <Welcome onStart={handleNext} />;
+                }
+            };
+
+            return (
+                <div className="h-screen w-screen flex flex-col overflow-hidden">
+                    <header className="bg-white border-b border-slate-100 shrink-0 z-50">
+                        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="w-8 h-8 bg-[#002561] rounded-sm flex items-center justify-center text-white font-black text-lg">E</div>
+                                <div className="hidden md:block">
+                                    <p className="font-black text-[#002561] text-[9px] uppercase tracking-[0.3em]">Candidate Journey</p>
+                                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tight">{VEDRAN_PROFILE.name}</p>
+                                </div>
+                            </div>
+                            <div className="flex-1 max-w-xs mx-8 md:mx-16">
+                                <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
+                                    <div className="h-full bg-[#002561] transition-all duration-700" style={{ width: `${progress}%` }}></div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 hidden sm:block">
+                                    <img src={VEDRAN_PROFILE.photoUrl} className="w-full h-full object-cover grayscale" />
+                                </div>
+                                <span className="text-[8px] font-black text-white uppercase bg-[#002561] px-2 py-1 rounded-sm tracking-widest">LXD Candidate</span>
+                            </div>
+                        </div>
+                    </header>
+                    <main className="flex-1 flex flex-col items-center justify-center overflow-hidden">
+                        <div className="w-full max-w-7xl mx-auto px-6 h-full flex flex-col justify-center">{renderStep()}</div>
+                    </main>
+                    <footer className="py-4 bg-white border-t border-slate-100 shrink-0 text-center">
+                        <p className="text-[9px] text-slate-300 font-bold uppercase tracking-[0.5em]">Ericsson Selection 2025 • Gothenburg, SE</p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
