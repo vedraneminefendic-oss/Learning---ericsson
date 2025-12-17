@@ -1,8 +1,5 @@
 {
   "name": "Vedran's LXD Journey for Ericsson",
   "description": "An interactive Learning Experience prototype showcasing Vedran Eminefendic's transition from Customer Success and Behavioral Science into a Learning Experience Designer role at Ericsson.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
+  "requestFramePermissions": []
 }

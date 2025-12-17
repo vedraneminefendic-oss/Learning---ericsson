@@ -10,8 +10,17 @@ export interface UserProfile {
 
 export enum CourseStep {
   WELCOME = 'WELCOME',
-  STAKEHOLDER_ALIGNMENT = 'STAKEHOLDER_ALIGNMENT',
-  LEARNER_JOURNEY = 'LEARNER_JOURNEY',
-  AI_WORKFLOW = 'AI_WORKFLOW',
+  VEDRAN_QUIZ = 'VEDRAN_QUIZ',
+  ERICSSON_FIT = 'ERICSSON_FIT',
+  STAKEHOLDERS = 'STAKEHOLDERS',
+  TECH_FLOW = 'TECH_FLOW',
+  VALUES = 'VALUES',
   FINAL_IMPACT = 'FINAL_IMPACT'
+}
+
+export interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctIndex: number;
+  funFact: string;
 }
